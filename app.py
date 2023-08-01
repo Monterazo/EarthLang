@@ -14,12 +14,12 @@ prompt = sl.text_input("Ask me:")
 #Prompt templates
 tips_template = PromptTemplate(
   input_variables=['topic'],   
-  template='Write me one tip of how to save Earth in the field of: {topic}'                                                
+  template='Write me one tip of how to save Earth in the field of: {topic}. The response must be in the format of inline text stating the and in the language of input'                                                
 )
 
 goals_template = PromptTemplate(
   input_variables=['tip'],   
-  template='Write me one of the UN Sustainable Development Goals that: ({tip}) helps achieve'                                                
+  template='Write me one of the UN Sustainable Development Goals that: ({tip}) helps achieve. The response must be in the format "Goal X: Goal name" and in the language of the input'                                                
 )
 
 
