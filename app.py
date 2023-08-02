@@ -6,6 +6,7 @@ os.environ['OPENAI_API_KEY'] = apikey
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain, SequentialChain
+from langchain.memory import ConversationBufferMemory
 
 #App framework 
 sl.title('Ways to save Earth 🌎')
@@ -14,13 +15,16 @@ prompt = sl.text_input("Ask me:")
 #Prompt templates
 tips_template = PromptTemplate(
   input_variables=['topic'],   
-  template='Write me one tip of how to save Earth in the field of: {topic}. The response must be in the format of inline text stating the and in the language of input'                                                
+  template="I want a response in the following ruleset: (Topic=[{topic}]; Format =[ One paragraph starting with one tip about the topic for improving the world in the subject of (topic), how I can work to achieve the improvement and how the world is gonna be improved by doing so] ; Language= [The topic language] )"                                           
 )
 
 goals_template = PromptTemplate(
   input_variables=['tip'],   
-  template='Write me one of the UN Sustainable Development Goals that: ({tip}) helps achieve. The response must be in the format "Goal X: Goal name" and in the language of the input'                                                
+  template="I want a response in the following ruleset: (Tip=[{tip}]; Format =[ Find the united nation's sustainable development goal that fits best with the tip and write it as (Goal X: Goal name)] ; Language= [The tip language] )"                                                       
 )
+
+#Memory
+memory = ConversationBufferMemory(input_key='topic', memory_key='chat_history')
 
 
 #LLM - definição da LLM usada
@@ -33,3 +37,5 @@ if prompt: #Função que passa o prompt para a LLM
   response = sequential_chain({'topic': prompt})
   sl.write(response['tip'])
   sl.write(response['goal']) #Mo#Mostra a resposta da LLM  
+  with sl.expander('Message History'):
+    sl.info(memory.buffer)
